@@ -1,0 +1,21 @@
+{
+  "name": "varnish",
+  "description": "high level tools for varnish",
+  "version": "0.0.1",
+  "author": "Nathan White <nw@nwhite.net>",
+  "dependencies": {
+  },
+  "devDependencies": {
+    "should": "*",
+    "mocha": "*"
+  },
+  "keywords": [
+    "varnish",
+    "vlc",
+    "routing",
+    "load balancing",
+    "load balancer",
+    "proxy",
+    "web accelerator"
+  ]
+}
