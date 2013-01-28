@@ -33,7 +33,14 @@ describe('Varnish Server', function(){
             + "-p ban_lurker_sleep=10 -S /hidden/file -s malloc -T localhost:4242 "
             + "-t 900 -w 2,500,300";
     server.toString().should.equal(cmd);
+  });
+  
+  it('should handle passing raw args', function(){
+    server.args('-i test-chain -n testing -a localhost:3333 -f /default.vcl -t 900');
     
+    server.toString().should.equal('varnishd -a localhost:3333 -f /default.vcl -i test-chain -n testing -t 900');
+    server.ttl(250);
+    server.toString().should.equal('varnishd -a localhost:3333 -f /default.vcl -i test-chain -n testing -t 250');
     
   });
   
