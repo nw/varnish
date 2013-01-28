@@ -167,7 +167,7 @@ filters receive a process obj.
 
 
 <a name="a5"/>
-### Server
+## Server
 
 Configuration options cannot be changed once a server has been initialized and has a pid. Attempts to change will be ignored.
 
@@ -177,7 +177,7 @@ Configuration options cannot be changed once a server has been initialized and h
 	- child: false
 
 
-#### listen
+### listen
 
 ```js
 
@@ -189,59 +189,59 @@ var cmd = server
 ```
 
 
-#### backend
+### backend
 
-#### compile
+### compile
 
-#### debug
+### debug
 
-#### foreground
+### foreground
 
-#### vcl
+### vcl
 
-#### group
+### group
 
-#### hash
+### hash
 
-#### id
+### id
 
-#### shmlog
+### shmlog
 
-#### name
+### name
 
-#### pidfile
+### pidfile
 
-#### param
+### param
 
-#### secret
+### secret
 
-#### storage
+### storage
 
-#### management
+### management
 
-#### reverse
+### reverse
 
-#### ttl
+### ttl
 
-#### user
+### user
 
-#### version
+### version
 
-#### workers
+### workers
 
-#### start
+### start
 
-#### kill
+### kill
 
-#### admin
+### admin
 
-#### stat
+### stat
 
-#### log
+### log
 
 
 <a name="a6"/>
-### Admin
+## Admin
 
 The admin console has be wrapped to return json objects of the text response.
 
@@ -257,62 +257,62 @@ function(err, result, raw){
 result only exists if err is `null`. raw is the string received over the admin port.
 
 
-#### connect
+### connect
 
-#### send
+### send
 
-#### destroy
+### destroy
 
-#### ping
+### ping
 
-#### status
+### status
 
-#### start
+### start
 
-#### stop
+### stop
 
-#### list
+### list
 
-#### load
+### load
 
-#### use
+### use
 
-#### show
+### show
 
-#### inline
+### inline
 
-#### discard
+### discard
 
-#### settings
+### settings
 
-#### set
+### set
 
-#### panic
+### panic
 
-#### clear
+### clear
 
-#### storage
+### storage
 
-#### backend
+### backend
 
-#### ban
+### ban
 
 <a name="a7"/>
-### Stat
+## Stat
 
 <a name="a8"/>
-### VCL
+## VCL
 
 A chain-able interface that allows vcl files to be written in javascript.
 
 <a name="a9"/>
-### Top
+## Top
 
 <a name="a10"/>
 ### Log
 
 <a name="a11"/>
-### Licence
+## Licence
 
 
 
