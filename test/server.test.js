@@ -42,7 +42,26 @@ describe('Varnish Server', function(){
     server.toString().should.equal('varnishd -a localhost:3333 -f /default.vcl -i test-chain -n testing -t 900');
     server.ttl(250);
     server.toString().should.equal('varnishd -a localhost:3333 -f /default.vcl -i test-chain -n testing -t 250');
+  });
+
+  it('should handle passing raw args with enviromental variables', function(){
+    server.args('-i test -n testing -a :3333 :9999 -f /default.vcl TEST_MODE=true MODE=debug');
     
+    server.toString().should.equal('varnishd -a :3333,:9999 -f /default.vcl -i test -n testing');
+    server.environment.TEST_MODE.should.equal('true');
+    server.environment.MODE.should.equal('debug');
+  });
+  
+  it('should handle args merging with existing args', function(){
+    server
+      .storage('store=malloc')
+      .listen(':3333')
+      .workers('2')
+      .param('ban_lurker_sleep', 10)
+      .name('test')
+      .args('-a :4444 :6565 -s file,10 -w 4,500,200 -p cli_timeout=20 -n override');  
+      
+    server.toString().should.equal('varnishd -a :3333,:4444,:6565 -n override -p ban_lurker_sleep=10 -p cli_timeout=20 -s store=malloc -s file,10 -w 4,500,200');
   });
   
   it('should handle listen properly (-a)', function(){
