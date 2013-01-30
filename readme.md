@@ -1,6 +1,9 @@
 # Varnish
 
-Varnish is a web accelerator. This library aims to make it easier to manage varnish. 
+varnish.js is a library to help with the management of varnish servers.
+
+_from:_ [varnish-cache.org](https://www.varnish-cache.org/)
+		Varnish is a web accelerator. You install it in front of your web application and it will speed it up significantly. 
 
 ## README Contents
 - [Features](#a1)
@@ -9,6 +12,29 @@ Varnish is a web accelerator. This library aims to make it easier to manage varn
 - [Api](#a4)
 	- [Server](#a5)
 	- [Admin](#a6)
+		- [Admin()](#client)
+	  - [Admin.connect()](#clientconnect)
+	  - [Admin.data()](#clientdata)
+	  - [Admin.send()](#clientsendcommandstringarg1stringarg2stringcallbackfunction)
+	  - [Admin.queue()](#clientqueue)
+	  - [Admin.process()](#clientprocess)
+	  - [Admin.auth()](#clientauth)
+	  - [Admin.ping()](#clientpingcallbackfunction)
+	  - [Admin.status()](#clientstatuscallbackfunction)
+	  - [Admin.start()](#clientstartcallbackfunction)
+	  - [Admin.stop()](#clientstopcallbackfunction)
+	  - [Admin.list()](#clientlistcallbackfunction)
+	  - [Admin.load()](#clientloadreferencestringpathstringcallbackfunction)
+	  - [Admin.use()](#clientusereferencestringcallbackfunction)
+	  - [Admin.inline()](#clientinlinereferencestringinlinemixedcallbackfunction)
+	  - [Admin.discard()](#clientdiscardreferencestringcallbackfunction)
+	  - [Admin.settings()](#clientsettingsnamestringcallbackfunction)
+	  - [Admin.set()](#clientsetparameterstringnewstringcallbackfunction)
+	  - [Admin.panic()](#clientpaniccallbackfunction)
+	  - [Admin.clear()](#clientclearcallbackfunction)
+	  - [Admin.storage()](#clientstoragecallbackfunction)
+	  - [Admin.backend()](#clientbackendcallbackfunction)
+	  - [Admin.ban()](#clientbanurlstringcallbackfunction)
 	- [Stat](#a7)
 	- [VCL](#a8)
 	- [Top](#a9)
@@ -242,20 +268,281 @@ var cmd = server
 
 
 <a name="a6"/>
-## Admin
+## Admin()
 
-The admin console has be wrapped to return json objects of the text response.
+  Admin client for `varnishadm`
 
-callbacks for all these methods is as follows
 
 ```js
 
-function(err, result, raw){
+var admin = new varnish.Admin();
+```
+  
+	__Options__:
+  
+- `auth` {String||Buffer} content of secret file for varnish
+- `file` if auth not present will load file contents.
+- `auto connect` {Boolean}
+
+## Admin.on('connect')
+
+This is event is emitted when the admin instance establishes a socket connection with the admin port.
+
+
+## Admin.on('authenticated')
+
+Fired when the authentication challenge from the varnish server has been responded to correctly.
+
+## Admin.on('close')
+
+Emitted when the connection to the admin port has been closed.
+
+## Admin.on('error')
+
+Any network related error is emitted here.
+
+
+## Admin.connect()
+
+  Use when `autoconnect` flag == false
+
+
+__Command Errors__
+
+All errors that occur talking directly to the admin port will be handled in a callback and will not emit an `error` event. 
+
+### Errors
+
+`error instanceof Error` in addition they have the a `code` property.
+
+- 100: 'Syntax Error'
+- 101: 'Unknown Request'
+- 102: 'Not Implemented'
+- 104: 'Too Few Parameters'
+- 105: 'Too Many Parameters'
+- 106: 'Bad Parameter'
+- 107: 'Authentication Required'
+- 200: 'OK'
+- 201: 'Truncated'
+- 300: "Can't Perform Operation"
+- 400: "Communication Error"
+- 500: "Close"
+
+_not implemented by varnishadm_
+- 800: 'Response Parsing Error'
+
+
+## Admin.send(command, arg1, arg2, Function)
+
+  Send command to `varnishadm`. This is talking to the socket directly.
+
+```js
+
+admin.send('help', function(err, resp){
 	
-}
+});
+
+admin.send('vcl.load', 'dosattack', '/path/to/file/');
+admin.send('vcl.use dosattack');
 ```
 
-result only exists if err is `null`. raw is the string received over the admin port.
+resp in all cases will be a string of the complete response from the admin.
+
+
+__Command Wrappers__
+
+The following methods wrap the send command and parse the output of the response for you. As a result all callbacks passed to these method will receive three parameters.
+
+- `error` {Error} object or `null`
+- `resp` parsed {Object} if `error == null`
+- `raw` the string response from the socket.
+
+
+## Admin.ping(callback)
+
+  Ping backend
+
+```js
+
+admin.ping(function(err, pong){
+	if(!pong) // we have problems
+})
+```
+
+## Admin.status(callback)
+
+  Check if child state == 'running'
+
+```js
+
+admin.status(function(err, running){
+	if(!running) // we need to start it
+})
+```
+
+## Admin.start(callback)
+
+  Starts child process (sets state == 'running')
+
+```js
+
+admin.start(function(err){
+	// started if no error
+});
+```
+
+## Admin.stop(callback)
+
+  Stops child process (sets state == 'stopped')
+
+```js
+
+admin.stop(function(err){
+	// stopped if no error
+});
+```
+
+## Admin.list(callback)
+
+  Returns list of loaded vcl files
+  
+  VCL {Object}
+  
+- name {String} name of vcl
+- num {String} ???
+- status {String} 'active|available|boot'
+
+```js
+
+admin.list(function(err, list){
+
+console.log(list);	
+<!-- [
+   {
+     "status": "available",
+     "num": "0",
+     "name": "old"
+   },
+   {
+     "status": "active",
+     "num": "7",
+     "name": "super_cache"
+   }
+ ] -->
+});
+```
+
+## Admin.load(reference, path, callback)
+
+  Load a vcl from a file
+
+## Admin.use(reference, callback)
+
+  Make a vcl config active.
+
+## Admin.inline(reference, inline, callback)
+
+  Make a vcl config active.
+
+## Admin.discard(reference, callback)
+
+  Discard a loaded vcl
+
+## Admin.settings(name, callback)
+
+  Get details on varnish configuration parameters
+  
+  __Param__:
+  
+- value: {String} current value
+- unit: {String} the unit type varnish expects
+- default: {String} default value
+- description: {String} description
+
+
+
+## Admin.set(parameter, new, callback)
+
+  Set a parameter
+
+## Admin.panic(callback)
+
+  Check for latest panic
+
+## Admin.clear(callback)
+
+  Clears the last panic
+
+## Admin.storage(callback)
+
+  Get list of current storage w/ type
+
+```js
+
+admin.storage(function(err, devices){
+	console.log(devices);
+	<!-- {
+    "storage.Transient": "malloc",
+    "storage.s0": "malloc"
+  } -->
+})
+
+```
+
+## Admin.backend(callback)
+
+  List of all backend currently referenced in loaded VCLs
+  
+  __Backend__:
+
+- name {String}
+- host {String}
+- port {String}
+- refs {String} number of vcls pointing at backend
+- admin {String}
+- status {String}
+- passed {String}
+- window {String}
+
+```js
+
+app.backend(function(err, backends){
+	console.log(backends);
+	
+	 <!-- [
+    {
+      "name": "prod",
+      "host": "108.166.39.30",
+      "port": "80",
+      "refs": "1",
+      "admin": "probe",
+      "status": "Sick",
+      "passed": "1",
+      "window": "5"
+    },
+    {
+      "name": "api",
+      "host": "198.61.245.73",
+      "port": "80",
+      "refs": "6",
+      "admin": "probe",
+      "status": "Healthy",
+      "passed": "5",
+      "window": "5"
+    }
+  ] -->
+	
+})
+
+```
+
+## Admin.ban(url, callback)
+
+  Ban urls/rules from cache
+
+
+
+
 
 
 ### connect
