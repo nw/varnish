@@ -12,29 +12,6 @@ _from:_ [varnish-cache.org](https://www.varnish-cache.org/)
 - [Api](#a4)
 	- [Server](#a5)
 	- [Admin](#a6)
-		- [Admin()](#client)
-	  - [Admin.connect()](#clientconnect)
-	  - [Admin.data()](#clientdata)
-	  - [Admin.send()](#clientsendcommandstringarg1stringarg2stringcallbackfunction)
-	  - [Admin.queue()](#clientqueue)
-	  - [Admin.process()](#clientprocess)
-	  - [Admin.auth()](#clientauth)
-	  - [Admin.ping()](#clientpingcallbackfunction)
-	  - [Admin.status()](#clientstatuscallbackfunction)
-	  - [Admin.start()](#clientstartcallbackfunction)
-	  - [Admin.stop()](#clientstopcallbackfunction)
-	  - [Admin.list()](#clientlistcallbackfunction)
-	  - [Admin.load()](#clientloadreferencestringpathstringcallbackfunction)
-	  - [Admin.use()](#clientusereferencestringcallbackfunction)
-	  - [Admin.inline()](#clientinlinereferencestringinlinemixedcallbackfunction)
-	  - [Admin.discard()](#clientdiscardreferencestringcallbackfunction)
-	  - [Admin.settings()](#clientsettingsnamestringcallbackfunction)
-	  - [Admin.set()](#clientsetparameterstringnewstringcallbackfunction)
-	  - [Admin.panic()](#clientpaniccallbackfunction)
-	  - [Admin.clear()](#clientclearcallbackfunction)
-	  - [Admin.storage()](#clientstoragecallbackfunction)
-	  - [Admin.backend()](#clientbackendcallbackfunction)
-	  - [Admin.ban()](#clientbanurlstringcallbackfunction)
 	- [Stat](#a7)
 	- [VCL](#a8)
 	- [Top](#a9)
@@ -417,7 +394,7 @@ admin.stop(function(err){
 admin.list(function(err, list){
 
 console.log(list);	
-<!-- [
+/*
    {
      "status": "available",
      "num": "0",
@@ -428,7 +405,7 @@ console.log(list);
      "num": "7",
      "name": "super_cache"
    }
- ] -->
+ ] */
 });
 ```
 
@@ -459,7 +436,50 @@ console.log(list);
 - default: {String} default value
 - description: {String} description
 
+	_Sample List_
+`acceptor_sleep_decay`, `acceptor_sleep_incr`, `acceptor_sleep_max`, `auto_restart`, `ban_dups`, `ban_lurker_sleep`, `between_bytes_timeout`, `cc_command`, `cli_buffer`, `cli_timeout`, `clock_skew`, `connect_timeout`, `critbit_cooloff`, `default_grace`, `default_keep`, `default_ttl`, `diag_bitmap`, `esi_syntax`, `expiry_sleep`, `fetch_chunksize`, `fetch_maxchunksize`, `first_byte_timeout`, `group`, `gzip_level`, `gzip_memlevel`, `gzip_stack_buffer`, `gzip_tmp_space`, `gzip_window`, `http_gzip_support`, `http_max_hdr`, `http_range_support`, `http_req_hdr_len`, `http_req_size`, `http_resp_hdr_len`, `http_resp_size`, `idle_send_timeout`, `listen_address`, `listen_depth`, `log_hashstring`, `log_local_address`, `lru_interval`, `max_esi_depth`, `max_restarts`, `nuke_limit`, `pcre_match_limit`, `pcre_match_limit_recursion`, `ping_interval`, `pipe_timeout`, `prefer_ipv6`, `queue_max`, `rush_exponent`, `saintmode_threshold`, `send_timeout`, `sess_timeout`, `sess_workspace`, `session_linger`, `session_max`, `shm_reclen`, `shm_workspace`, `shortlived`, `syslog_cli_traffic`, `thread_pool_add_delay`, `thread_pool_add_threshold`, `thread_pool_fail_delay`, `thread_pool_max`, `thread_pool_min`, `thread_pool_purge_delay`, `thread_pool_stack`, `thread_pool_timeout`, `thread_pool_workspace`, `thread_pools`, `thread_stats_rate`, `user`, `vcc_err_unref`, `vcl_dir`, `vcl_trace`, `vmod_dir`, `waiter`
 
+
+```js
+{
+  auto_restart: {
+    value: 'on',
+    unit: 'bool',
+    default: 'on [bool]',
+    desc: 'Restart child process automatically if it dies.'
+  },
+  ban_dups: {
+    value: 'on',
+    unit: 'bool',
+    default: 'on [bool]',
+    desc: 'Detect and eliminate duplicate bans.'
+  },
+  ban_lurker_sleep: {
+    value: '0.010000',
+    unit: 's',
+    default: '0.010000 [s]',
+    desc: 'How long time does the ban lurker thread sleeps between successful attempts to push the last item up the ban  list.  It always sleeps a second when nothing can be done. A value of zero disables the ban lurker.'
+  },
+  cli_buffer: {
+    value: '8192',
+    unit: 'bytes',
+    default: '8192 [bytes]',
+    desc: 'Size of buffer for CLI input. You may need to increase this if you have big VCL files and use the vcl.inline CLI command. NB: Must be specified with -p to have effect.'
+  },
+  cli_timeout: {
+    value: '10',
+    unit: 'seconds',
+    default: '10 [seconds]',
+    desc: 'Timeout for the childs replies to CLI requests from the master.'
+  },
+  clock_skew: {
+    value: '10',
+    unit: 's',
+    default: '10 [s]',
+    desc: 'How much clockskew we are willing to accept between the backend and our own clock.'
+  }
+}
+```
 
 ## Admin.set(parameter, new, callback)
 
@@ -481,10 +501,10 @@ console.log(list);
 
 admin.storage(function(err, devices){
 	console.log(devices);
-	<!-- {
+	/* {
     "storage.Transient": "malloc",
     "storage.s0": "malloc"
-  } -->
+  } */
 })
 
 ```
@@ -509,7 +529,7 @@ admin.storage(function(err, devices){
 app.backend(function(err, backends){
 	console.log(backends);
 	
-	 <!-- [
+	 /* [
     {
       "name": "prod",
       "host": "108.166.39.30",
@@ -530,7 +550,7 @@ app.backend(function(err, backends){
       "passed": "5",
       "window": "5"
     }
-  ] -->
+  ] */
 	
 })
 
@@ -539,51 +559,6 @@ app.backend(function(err, backends){
 ## Admin.ban(url, callback)
 
   Ban urls/rules from cache
-
-
-
-
-
-
-### connect
-
-### send
-
-### destroy
-
-### ping
-
-### status
-
-### start
-
-### stop
-
-### list
-
-### load
-
-### use
-
-### show
-
-### inline
-
-### discard
-
-### settings
-
-### set
-
-### panic
-
-### clear
-
-### storage
-
-### backend
-
-### ban
 
 <a name="a7"/>
 ## Stat
