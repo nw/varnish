@@ -164,11 +164,11 @@ varnish.discover({filter: [fn,fn]})
 
 filters receive a process obj.
 
-	- `pid`: pid
-	- `ppid`: Parent pid
-	- `user`: user
-	- `command`: command running
-	- `args`: string of args passed to command
+  - `pid`: pid
+  - `ppid`: Parent pid
+  - `user`: user
+  - `command`: command running
+  - `args`: string of args passed to command
 
 
 ### create
@@ -179,10 +179,10 @@ filters receive a process obj.
 
 Configuration options cannot be changed once a server has been initialized and has a pid. Attempts to change will be ignored.
 
-	- pid: false
-	- path: '/usr/local/sbin/varnishd'
-	- running: false
-	- child: false
+  - pid: false
+  - path: '/usr/local/sbin/varnishd'
+  - running: false
+  - child: false
 
 
 ### listen
