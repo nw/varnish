@@ -31,6 +31,7 @@ Varnish is a web accelerator. You install it in front of your web application an
 
 npm install varnish
 ```
+You don't need varnish on the same machine or even at all to use this package. In order to run the integration tests you will need varnish local. Check out the [documentation and installation](First install [varnish](https://www.varnish-cache.org/docs) ).
 
 <a name="a3"/>
 ## Usage
@@ -90,7 +91,6 @@ admin
 	.backend()
 	.use()
 	.kill();
-// etc
 ```
 
 **Analyse**
@@ -248,21 +248,34 @@ var cmd = server
 
 
 <a name="a6"/>
-## Admin()
+## Admin(host, port, options)
 
   Admin client for `varnishadm`
 
 
 ```js
 
-var admin = new varnish.Admin();
+var varnish = require('varnish')
+  , admin = new varnish.Admin();
 ```
   
   __Options__:
   
+- `name` {String} name of the instance to connect to
 - `auth` {String||Buffer} content of secret file for varnish
 - `file` if auth not present will load file contents.
 - `auto connect` {Boolean}
+
+Using the `Server` class you can also create an `Admin` instance.
+
+```js
+
+var admin = server.admin();
+```
+
+The nice thing about creating it from the server is all properties set that apply to the admin class will be passed through automatically if the server has already been initialized and is running.
+
+
 
 ### Events
 
