@@ -3,7 +3,10 @@
 varnish.js is a library to help with the management of varnish servers.
 
 _from:_ [varnish-cache.org](https://www.varnish-cache.org/)
-		Varnish is a web accelerator. You install it in front of your web application and it will speed it up significantly. 
+
+```
+Varnish is a web accelerator. You install it in front of your web application and it will speed it up significantly. 
+```
 
 ## README Contents
 - [Features](#a1)
@@ -67,7 +70,7 @@ server
 	.management('localhost:4242')
 	.vcl('/etc/varnish/default.vcl')
 	.ttl(900)
-	.param('ban_lurker_sleep', 10);
+	.param('max_restarts', 10);
 	
 server.start(function(err, server){
 	console.log(server.pid);
@@ -255,40 +258,24 @@ var cmd = server
 var admin = new varnish.Admin();
 ```
   
-	__Options__:
+  __Options__:
   
 - `auth` {String||Buffer} content of secret file for varnish
 - `file` if auth not present will load file contents.
 - `auto connect` {Boolean}
 
-## Admin.on('connect')
+### Events
 
-This is event is emitted when the admin instance establishes a socket connection with the admin port.
+- `connect`: when a socket connection has been established with the management port.
+- `authenticated`: when the authentication challenge from management port has been responded to correctly.
+- `close`: when connection to the admin port has been closed.
+- `error`: any network related error.
 
-
-## Admin.on('authenticated')
-
-Fired when the authentication challenge from the varnish server has been responded to correctly.
-
-## Admin.on('close')
-
-Emitted when the connection to the admin port has been closed.
-
-## Admin.on('error')
-
-Any network related error is emitted here.
-
-
-## Admin.connect()
-
-  Use when `autoconnect` flag == false
-
+### Errors
 
 __Command Errors__
 
-All errors that occur talking directly to the admin port will be handled in a callback and will not emit an `error` event. 
-
-### Errors
+All errors that occur talking directly to the admin port will be handled in a callback and will not emit an `error` event.
 
 `error instanceof Error` in addition they have the a `code` property.
 
@@ -309,7 +296,12 @@ _not implemented by varnishadm_
 - 800: 'Response Parsing Error'
 
 
-## Admin.send(command, arg1, arg2, Function)
+### Admin.connect()
+
+  Use when `autoconnect` flag == false
+
+
+### Admin.send(command, arg1, arg2, Function)
 
   Send command to `varnishadm`. This is talking to the socket directly.
 
@@ -326,7 +318,7 @@ admin.send('vcl.use dosattack');
 resp in all cases will be a string of the complete response from the admin.
 
 
-__Command Wrappers__
+### __Command Wrappers__
 
 The following methods wrap the send command and parse the output of the response for you. As a result all callbacks passed to these method will receive three parameters.
 
@@ -335,7 +327,7 @@ The following methods wrap the send command and parse the output of the response
 - `raw` the string response from the socket.
 
 
-## Admin.ping(callback)
+### Admin.ping(callback)
 
   Ping backend
 
@@ -346,7 +338,7 @@ admin.ping(function(err, pong){
 })
 ```
 
-## Admin.status(callback)
+### Admin.status(callback)
 
   Check if child state == 'running'
 
@@ -357,7 +349,7 @@ admin.status(function(err, running){
 })
 ```
 
-## Admin.start(callback)
+### Admin.start(callback)
 
   Starts child process (sets state == 'running')
 
@@ -368,7 +360,7 @@ admin.start(function(err){
 });
 ```
 
-## Admin.stop(callback)
+### Admin.stop(callback)
 
   Stops child process (sets state == 'stopped')
 
@@ -379,7 +371,7 @@ admin.stop(function(err){
 });
 ```
 
-## Admin.list(callback)
+### Admin.list(callback)
 
   Returns list of loaded vcl files
   
@@ -395,7 +387,7 @@ admin.list(function(err, list){
 
 console.log(list);	
 /*
-   {
+ [ {
      "status": "available",
      "num": "0",
      "name": "old"
@@ -409,23 +401,23 @@ console.log(list);
 });
 ```
 
-## Admin.load(reference, path, callback)
+### Admin.load(reference, path, callback)
 
   Load a vcl from a file
 
-## Admin.use(reference, callback)
+### Admin.use(reference, callback)
 
   Make a vcl config active.
 
-## Admin.inline(reference, inline, callback)
+### Admin.inline(reference, inline, callback)
 
   Make a vcl config active.
 
-## Admin.discard(reference, callback)
+### Admin.discard(reference, callback)
 
   Discard a loaded vcl
 
-## Admin.settings(name, callback)
+### Admin.settings(name, callback)
 
   Get details on varnish configuration parameters
   
@@ -448,18 +440,6 @@ console.log(list);
     default: 'on [bool]',
     desc: 'Restart child process automatically if it dies.'
   },
-  ban_dups: {
-    value: 'on',
-    unit: 'bool',
-    default: 'on [bool]',
-    desc: 'Detect and eliminate duplicate bans.'
-  },
-  ban_lurker_sleep: {
-    value: '0.010000',
-    unit: 's',
-    default: '0.010000 [s]',
-    desc: 'How long time does the ban lurker thread sleeps between successful attempts to push the last item up the ban  list.  It always sleeps a second when nothing can be done. A value of zero disables the ban lurker.'
-  },
   cli_buffer: {
     value: '8192',
     unit: 'bytes',
@@ -471,29 +451,23 @@ console.log(list);
     unit: 'seconds',
     default: '10 [seconds]',
     desc: 'Timeout for the childs replies to CLI requests from the master.'
-  },
-  clock_skew: {
-    value: '10',
-    unit: 's',
-    default: '10 [s]',
-    desc: 'How much clockskew we are willing to accept between the backend and our own clock.'
   }
 }
 ```
 
-## Admin.set(parameter, new, callback)
+### Admin.set(parameter, new, callback)
 
   Set a parameter
 
-## Admin.panic(callback)
+### Admin.panic(callback)
 
   Check for latest panic
 
-## Admin.clear(callback)
+### Admin.clear(callback)
 
   Clears the last panic
 
-## Admin.storage(callback)
+### Admin.storage(callback)
 
   Get list of current storage w/ type
 
@@ -509,7 +483,7 @@ admin.storage(function(err, devices){
 
 ```
 
-## Admin.backend(callback)
+### Admin.backend(callback)
 
   List of all backend currently referenced in loaded VCLs
   
@@ -556,7 +530,7 @@ app.backend(function(err, backends){
 
 ```
 
-## Admin.ban(url, callback)
+### Admin.ban(url, callback)
 
   Ban urls/rules from cache
 
