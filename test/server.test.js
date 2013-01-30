@@ -32,6 +32,7 @@ describe('Varnish Server', function(){
             + "-i test-chain -l 200M -n chaining -P /var/run/varnish/chaining.pid "
             + "-p ban_lurker_sleep=10 -S /hidden/file -s malloc -T localhost:4242 "
             + "-t 900 -w 2,500,300";
+            
     server.toString().should.equal(cmd);
   });
   
