@@ -8,6 +8,8 @@ _from:_ [varnish-cache.org](https://www.varnish-cache.org/)
 Varnish is a web accelerator. You install it in front of your web application and it will speed it up significantly. 
 ```
 
+__Note:__ This library only targets Varnish 3.x and above. For clarity on the feature please refer to the [documentation](https://www.varnish-cache.org/docs/3.0/)
+
 ## README Contents
 - [Features](#a1)
 - [Installation](#a2)
@@ -176,6 +178,8 @@ filters receive a process obj.
 
 <a name="a5"/>
 ## Server
+
+A helper class for wrapping the generation of command line options to create a varnishd instance. For more clarity on the options to pass please refer to the [varnishd documentation](https://www.varnish-cache.org/docs/3.0/reference/varnishd.html). 
 
 Configuration options cannot be changed once a server has been initialized and has a pid. Attempts to change will be ignored.
 
