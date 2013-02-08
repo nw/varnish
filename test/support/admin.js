@@ -1,5 +1,5 @@
 
-var Admin = require('../../lib/admin')
+var Admin = require('../../').Admin
   , commands = require('./raw.fixture.json')
   , EventEmitter = require('events').EventEmitter;
 
@@ -9,7 +9,7 @@ function MockAdmin(){
   return this;
 }
 
-MockAdmin.Server = function(port, host){
+Admin.Server = function(port, host){
   return new MockServer(port, host);
 }
 
@@ -29,7 +29,6 @@ function MockServer(){
 MockServer.prototype.__proto__ = EventEmitter.prototype;
 
 MockServer.prototype.write = function(data){
-  
   var cmd = data.slice(0,-1)
     , resp = commands[cmd];
 
