@@ -207,6 +207,14 @@ var cmd = server
 
 Use the specified host as backend server. If port is not specified, the default is 8080
 
+```js
+
+var cmd = server
+	.backend('backend.com')
+	.toString();
+// cmd = '/usr/local/sbin/varnishd -b backend.com'
+```
+
 ### compile
 
 Print VCL code compiled to C language and exit. Specify the VCL file to compile with the -f option (`Server.vcl`).
@@ -215,9 +223,25 @@ Print VCL code compiled to C language and exit. Specify the VCL file to compile 
 
 Enables debugging mode: The parent process runs in the foreground with a CLI connection on stdin/stdout, and the child process must be started explicitly with a CLI command. Terminating the parent process will also terminate the child.
 
+```js
+
+var cmd = server
+	.debug()
+	.toString();
+// cmd = '/usr/local/sbin/varnishd -d'
+```
+
 ### foreground
 
 Run in the foreground.
+
+```js
+
+var cmd = server
+	.foreground()
+	.toString();
+// cmd = '/usr/local/sbin/varnishd -F'
+```
 
 ### vcl
 
