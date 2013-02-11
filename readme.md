@@ -141,9 +141,9 @@ admin.inline('refname', vcl, function(err){
 	
 ```
 <a name="a4"/>
-## API
+## Varnish
 
-### get
+### varnish.get()
 
 Find a varnishd instance based on id or instance name (-n). A function can be passed as a filter. The first server matches wins.
 
@@ -155,7 +155,7 @@ varnish.get(fn, callback); // filter function
 
 ```
 
-### discover
+### varnish.discover()
 
 ```js
 
@@ -173,11 +173,11 @@ filters receive a process obj.
   - `args`: string of args passed to command
 
 
-### create
+### varnish.create()
 
 
 <a name="a5"/>
-## Server
+## Server()
 
 A helper class for wrapping the generation of command line options to create a varnishd instance. For more clarity on the options to pass please refer to the [varnishd documentation](https://www.varnish-cache.org/docs/3.0/reference/varnishd.html). 
 
@@ -189,7 +189,7 @@ Configuration options cannot be changed once a server has been initialized and h
   - child: false
 
 
-### listen
+### Server.listen(host)
 
 Listen for client requests on the specified address and port. The address can be a host name (“localhost”), an IPv4 dotted-quad (“127.0.0.1”), or an IPv6 address enclosed in square brackets (“[::1]”). If address is not specified, varnishd will listen on all available IPv4 and IPv6 interfaces. If port is not specified, the default HTTP port as listed in /etc/services is used. Multiple listening addresses and ports can be specified.
 
@@ -203,7 +203,7 @@ var cmd = server
 ```
 
 
-### backend
+### Server.backend(host)
 
 Use the specified host as backend server. If port is not specified, the default is 8080
 
@@ -215,11 +215,11 @@ var cmd = server
 // cmd = '/usr/local/sbin/varnishd -b backend.com'
 ```
 
-### compile
+### Server.compile()
 
 Print VCL code compiled to C language and exit. Specify the VCL file to compile with the -f option (`Server.vcl`).
 
-### debug
+### Server.debug()
 
 Enables debugging mode: The parent process runs in the foreground with a CLI connection on stdin/stdout, and the child process must be started explicitly with a CLI command. Terminating the parent process will also terminate the child.
 
@@ -231,7 +231,7 @@ var cmd = server
 // cmd = '/usr/local/sbin/varnishd -d'
 ```
 
-### foreground
+### Server.foreground()
 
 Run in the foreground.
 
@@ -243,15 +243,15 @@ var cmd = server
 // cmd = '/usr/local/sbin/varnishd -F'
 ```
 
-### vcl
+### Server.vcl(vclString || Vcl instance)
 
 Use the specified VCL configuration file instead of the builtin default. See vcl for details on VCL syntax. When no configuration is supplied varnishd will not start the cache process.
 
-### group
+### Server.group(group)
 
 Specifies the name of an unprivileged group to which the child process should switch before it starts accepting connections. This is a shortcut for specifying the group run-time parameter.
 
-### hash
+### Server.hash()
 
 Specifies the hash algorithm.
 
@@ -259,71 +259,71 @@ Specifies the hash algorithm.
   - classic[,buckets]: A standard hash table. This is the default. The hash key is the CRC32 of the object's URL modulo the size of the hash table. Each table entry points to a list of elements which share the same hash key. The buckets parameter specifies the number of entries in the hash table. The default is 16383.
   - critbit: A self-scaling tree structure. The default hash algorithm in 2.1. In comparison to a more traditional B tree the critbit tree is almost completely lockless.
 
-### id
+### Server.id()
 
 Specify the identity of the varnish server. This can be accessed using server.identity from VCL
 
-### shmlog
+### Server.shmlog()
 
 Specify size of shmlog file. Scaling suffixes like 'k', 'm' can be used up to (e)tabytes. Default is 80 Megabytes. Specifying less than 8 Megabytes is unwise.
 
-### name
+### Server.name()
 
 Specify a name for this instance. Amonst other things, this name is used to construct the name of the directory in which varnishd keeps temporary files and persistent state. If the specified name begins with a forward slash, it is interpreted as the absolute path to the directory which should be used for this purpose.
 
-### pidfile
+### Server.pidfile()
 
 Write the process's PID to the specified file.
 
-### param
+### Server.param()
 
 Set the parameter specified by param to the specified value. See Run-Time Parameters for a list of parameters. This option can be used multiple times to specify multiple parameters.
 
-### secret
+### Server.secret()
 
 Path to a file containing a secret used for authorizing access to the management port.
 
-### storage
+### Server.storage()
 
 Use the specified storage backend. See Storage Types for a list of supported storage types. This option can be used multiple times to specify multiple storage files. You can name the different backends. Varnish will then reference that backend with the given name in logs, statistics, etc.
 
-### management
+### Server.management()
 
 Offer a management interface on the specified address and port. See Management Interface for a list of management commands.
 
-### reverse
+### Server.reverse()
 
 Connect to this port and offer the command line interface. Think of it as a reverse shell. When running with -M and there is no backend defined the child process (the cache) will not start initially.
 
-### ttl
+### Server.ttl()
 
 Specifies a hard minimum time to live for cached documents. This is a shortcut for specifying the default_ttl run-time parameter.
 
-### user
+### Server.user()
 
 Specifies the name of an unprivileged user to which the child process should switch before it starts accepting connections. This is a shortcut for specifying the user run- time parameter.
 
 If specifying both a user and a group, the user should be specified first.
 
-### version
+### Server.version()
 
 Display the version number and exit.
 
-### workers
+### Server.workers()
 
 Start at least min but no more than max worker threads with the specified idle timeout. This is a shortcut for specifying the thread_pool_min, thread_pool_max and thread_pool_timeout run-time parameters.
 
 If only one number is specified, thread_pool_min and thread_pool_max are both set to this number, and thread_pool_timeout has no effect.
 
-### start
+### Server.start()
 
-### kill
+### Server.kill()
 
-### admin
+### Server.admin()
 
-### stat
+### Server.stat()
 
-### log
+### Server.log()
 
 
 <a name="a6"/>
@@ -628,9 +628,12 @@ app.backend(function(err, backends){
   Ban urls/rules from cache
 
 <a name="a7"/>
-## VCL
+## VCL()
 
 A chain-able interface that allows vcl files to be written in javascript.
+
+
+
 
 <a name="a8"/>
 ## Stat
