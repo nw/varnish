@@ -520,10 +520,7 @@ console.log(list);
 - default: {String} default value
 - description: {String} description
 
-	_Sample List_
-	
-`acceptor_sleep_decay`, `acceptor_sleep_incr`, `acceptor_sleep_max`, `auto_restart`, `ban_dups`, `ban_lurker_sleep`, `between_bytes_timeout`, `cc_command`, `cli_buffer`, `cli_timeout`, `clock_skew`, `connect_timeout`, `critbit_cooloff`, `default_grace`, `default_keep`, `default_ttl`, `diag_bitmap`, `esi_syntax`, `expiry_sleep`, `fetch_chunksize`, `fetch_maxchunksize`, `first_byte_timeout`, `group`, `gzip_level`, `gzip_memlevel`, `gzip_stack_buffer`, `gzip_tmp_space`, `gzip_window`, `http_gzip_support`, `http_max_hdr`, `http_range_support`, `http_req_hdr_len`, `http_req_size`, `http_resp_hdr_len`, `http_resp_size`, `idle_send_timeout`, `listen_address`, `listen_depth`, `log_hashstring`, `log_local_address`, `lru_interval`, `max_esi_depth`, `max_restarts`, `nuke_limit`, `pcre_match_limit`, `pcre_match_limit_recursion`, `ping_interval`, `pipe_timeout`, `prefer_ipv6`, `queue_max`, `rush_exponent`, `saintmode_threshold`, `send_timeout`, `sess_timeout`, `sess_workspace`, `session_linger`, `session_max`, `shm_reclen`, `shm_workspace`, `shortlived`, `syslog_cli_traffic`, `thread_pool_add_delay`, `thread_pool_add_threshold`, `thread_pool_fail_delay`, `thread_pool_max`, `thread_pool_min`, `thread_pool_purge_delay`, `thread_pool_stack`, `thread_pool_timeout`, `thread_pool_workspace`, `thread_pools`, `thread_stats_rate`, `user`, `vcc_err_unref`, `vcl_dir`, `vcl_trace`, `vmod_dir`, `waiter`
-
+**[Complete List of Parameters](https://github.com/triplecrown/varnish/wiki/Server-Runtime-Parameters)**
 
 ```js
 {
