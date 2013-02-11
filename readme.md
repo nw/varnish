@@ -686,49 +686,7 @@ Stat.list(function(err, list){
 
 ```
 
-__List of fields__
-
-  _truncated_
-
-```
-Field name                     Description
-----------                     -----------
-client_conn                    Client connections accepted
-client_drop                    Connection dropped, no sess/wrk
-client_req                     Client requests received
-cache_hit                      Cache hits
-cache_hitpass                  Cache hits for pass
-cache_miss                     Cache misses
-backend_conn                   Backend conn. success
-backend_unhealthy              Backend conn. not attempted
-backend_busy                   Backend conn. too many
-backend_fail                   Backend conn. failures
-backend_reuse                  Backend conn. reuses
-backend_toolate                Backend conn. was closed
-backend_recycle                Backend conn. recycles
-backend_retry                  Backend conn. retry
-s_bodybytes                    Total body bytes
-sess_closed                    Session Closed
-sess_pipeline                  Session Pipeline
-sess_readahead                 Session Read Ahead
-sess_linger                    Session Linger
-n_vcl                          N vcl total
-n_vcl_avail                    N vcl available
-n_vcl_discard                  N vcl discarded
-n_ban                          N total active bans
-n_ban_gone                     N total gone bans
-n_ban_add                      N new bans added
-n_ban_retire                   N old bans deleted
-uptime                         Client uptime
-vmods                          Loaded VMODs
-n_gzip                         Gzip operations
-n_gunzip                       Gunzip operations
-LCK.sms.creat                  Created locks
-LCK.sms.destroy                Destroyed locks
-LCK.sms.locks                  Lock Operations
-
-..... and many more
-```
+**[Complete List of Stat Fields](https://github.com/triplecrown/varnish/wiki/Stat-Fields)**
 
 
 
