@@ -219,6 +219,15 @@ var cmd = server
 
 Print VCL code compiled to C language and exit. Specify the VCL file to compile with the -f option (`Server.vcl`).
 
+```js
+
+var cmd = server
+	.compile
+	.toString();
+// cmd = '/usr/local/sbin/varnishd -C'
+```
+
+
 ### Server.debug()
 
 Enables debugging mode: The parent process runs in the foreground with a CLI connection on stdin/stdout, and the child process must be started explicitly with a CLI command. Terminating the parent process will also terminate the child.
@@ -243,13 +252,29 @@ var cmd = server
 // cmd = '/usr/local/sbin/varnishd -F'
 ```
 
-### Server.vcl(vclString || Vcl instance)
+### Server.vcl(vclfile)
 
 Use the specified VCL configuration file instead of the builtin default. See vcl for details on VCL syntax. When no configuration is supplied varnishd will not start the cache process.
+
+```js
+
+var cmd = server
+	.vcl('/varnish/vcl/test.vcl')
+	.toString();
+// cmd = '/usr/local/sbin/varnishd -f /varnish/vcl/test.vcl'
+```
 
 ### Server.group(group)
 
 Specifies the name of an unprivileged group to which the child process should switch before it starts accepting connections. This is a shortcut for specifying the group run-time parameter.
+
+```js
+
+var cmd = server
+	.group('admin')
+	.toString();
+// cmd = '/usr/local/sbin/varnishd -g admin'
+```
 
 ### Server.hash()
 
@@ -258,46 +283,135 @@ Specifies the hash algorithm.
   - simple_list: A simple doubly-linked list. Not recommended for production use.
   - classic[,buckets]: A standard hash table. This is the default. The hash key is the CRC32 of the object's URL modulo the size of the hash table. Each table entry points to a list of elements which share the same hash key. The buckets parameter specifies the number of entries in the hash table. The default is 16383.
   - critbit: A self-scaling tree structure. The default hash algorithm in 2.1. In comparison to a more traditional B tree the critbit tree is almost completely lockless.
+  
+```js
+
+var cmd = server
+	.hash('classic,16383')
+	.toString();
+// cmd = '/usr/local/sbin/varnishd -h classic,16383'
+```
 
 ### Server.id()
 
 Specify the identity of the varnish server. This can be accessed using server.identity from VCL
 
+```js
+
+var cmd = server
+	.id('integration')
+	.toString();
+// cmd = '/usr/local/sbin/varnishd -i integration'
+```
+
 ### Server.shmlog()
 
 Specify size of shmlog file. Scaling suffixes like 'k', 'm' can be used up to (e)tabytes. Default is 80 Megabytes. Specifying less than 8 Megabytes is unwise.
+
+```js
+
+var cmd = server
+	.shmlog('80M')
+	.toString();
+// cmd = '/usr/local/sbin/varnishd -l 80M'
+```
 
 ### Server.name()
 
 Specify a name for this instance. Amonst other things, this name is used to construct the name of the directory in which varnishd keeps temporary files and persistent state. If the specified name begins with a forward slash, it is interpreted as the absolute path to the directory which should be used for this purpose.
 
+```js
+
+var cmd = server
+	.name('ref')
+	.toString();
+// cmd = '/usr/local/sbin/varnishd -n ref'
+```
+
 ### Server.pidfile()
 
 Write the process's PID to the specified file.
+
+```js
+
+var cmd = server
+	.pidfile('/var/run/varnish.pid')
+	.toString();
+// cmd = '/usr/local/sbin/varnishd -P /var/run/varnish.pid'
+```
 
 ### Server.param()
 
 Set the parameter specified by param to the specified value. See Run-Time Parameters for a list of parameters. This option can be used multiple times to specify multiple parameters.
 
+```js
+
+var cmd = server
+  .param('ban_lurker_sleep', 100)
+  .param('cli_buffer', 64000)
+  .toString();
+// cmd = '/usr/local/sbin/varnishd -p ban_lurker_sleep=100 -p cli_buffer=64000'
+```
+
 ### Server.secret()
 
 Path to a file containing a secret used for authorizing access to the management port.
+
+```js
+
+var cmd = server
+  .secret('/secret.file')
+  .toString();
+// cmd = '/usr/local/sbin/varnishd -S /secret.file'
+```
 
 ### Server.storage()
 
 Use the specified storage backend. See Storage Types for a list of supported storage types. This option can be used multiple times to specify multiple storage files. You can name the different backends. Varnish will then reference that backend with the given name in logs, statistics, etc.
 
+```js
+
+var cmd = server
+  .storage('malloc,500M)
+  .toString();
+// cmd = '/usr/local/sbin/varnishd -s malloc,500M'
+```
+
 ### Server.management()
 
 Offer a management interface on the specified address and port. See Management Interface for a list of management commands.
+
+```js
+
+var cmd = server
+  .management('localhost:5421')
+  .toString();
+// cmd = '/usr/local/sbin/varnishd -T localhost:5421'
+```
 
 ### Server.reverse()
 
 Connect to this port and offer the command line interface. Think of it as a reverse shell. When running with -M and there is no backend defined the child process (the cache) will not start initially.
 
+```js
+
+var cmd = server
+  .reverse('localhost:1245')
+  .toString();
+// cmd = '/usr/local/sbin/varnishd -M localhost:1245'
+```
+
 ### Server.ttl()
 
 Specifies a hard minimum time to live for cached documents. This is a shortcut for specifying the default_ttl run-time parameter.
+
+```js
+
+var cmd = server
+  .ttl(500)
+  .toString();
+// cmd = '/usr/local/sbin/varnishd -t 500'
+```
 
 ### Server.user()
 
@@ -305,15 +419,39 @@ Specifies the name of an unprivileged user to which the child process should swi
 
 If specifying both a user and a group, the user should be specified first.
 
+```js
+
+var cmd = server
+  .user('nw')
+  .toString();
+// cmd = '/usr/local/sbin/varnishd -u nw'
+```
+
 ### Server.version()
 
 Display the version number and exit.
+
+```js
+
+var cmd = server
+  .version()
+  .toString();
+// cmd = '/usr/local/sbin/varnishd -V'
+```
 
 ### Server.workers()
 
 Start at least min but no more than max worker threads with the specified idle timeout. This is a shortcut for specifying the thread_pool_min, thread_pool_max and thread_pool_timeout run-time parameters.
 
 If only one number is specified, thread_pool_min and thread_pool_max are both set to this number, and thread_pool_timeout has no effect.
+
+```js
+
+var cmd = server
+  .workers('2,500,300')
+  .toString();
+// cmd = '/usr/local/sbin/varnishd -w 2,500,300'
+```
 
 ### Server.start()
 
