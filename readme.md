@@ -67,7 +67,7 @@ server
 	.storage('malloc')
 	.shmlog("200M")
 	.workers('2,500,300')
-	.pidfile('/var/run/varnish/chaining.pid')
+	.pidfile('/var/run/varnish/example.pid')
 	.secret('/hidden/file')
 	.listen(':9000')
 	.listen('proxy:8383')
@@ -195,11 +195,10 @@ Listen for client requests on the specified address and port. The address can be
 
 ```js
 
-var cmd = server
-	.listen(':9000')
+server
+  .listen(':9000')
 	.listen('host.com:8888')
-	.toString();
-// cmd = '/usr/local/sbin/varnishd -a :9000,host.com:8888'
+	.toString(); // 'varnishd -a :9000,host.com:8888'
 ```
 
 
@@ -209,10 +208,9 @@ Use the specified host as backend server. If port is not specified, the default 
 
 ```js
 
-var cmd = server
+server
 	.backend('backend.com')
-	.toString();
-// cmd = '/usr/local/sbin/varnishd -b backend.com'
+	.toString(); // 'varnishd -b backend.com'
 ```
 
 ### Server.compile()
@@ -221,10 +219,9 @@ Print VCL code compiled to C language and exit. Specify the VCL file to compile 
 
 ```js
 
-var cmd = server
+server
 	.compile
-	.toString();
-// cmd = '/usr/local/sbin/varnishd -C'
+	.toString(); // 'varnishd -C'
 ```
 
 
@@ -234,10 +231,9 @@ Enables debugging mode: The parent process runs in the foreground with a CLI con
 
 ```js
 
-var cmd = server
+server
 	.debug()
-	.toString();
-// cmd = '/usr/local/sbin/varnishd -d'
+	.toString(); // 'varnishd -d'
 ```
 
 ### Server.foreground()
@@ -246,10 +242,9 @@ Run in the foreground.
 
 ```js
 
-var cmd = server
+server
 	.foreground()
-	.toString();
-// cmd = '/usr/local/sbin/varnishd -F'
+	.toString(); // 'varnishd -F'
 ```
 
 ### Server.vcl(vclfile)
@@ -258,10 +253,9 @@ Use the specified VCL configuration file instead of the builtin default. See vcl
 
 ```js
 
-var cmd = server
+server
 	.vcl('/varnish/vcl/test.vcl')
-	.toString();
-// cmd = '/usr/local/sbin/varnishd -f /varnish/vcl/test.vcl'
+	.toString(); // 'varnishd -f /varnish/vcl/test.vcl'
 ```
 
 ### Server.group(group)
@@ -270,26 +264,24 @@ Specifies the name of an unprivileged group to which the child process should sw
 
 ```js
 
-var cmd = server
+server
 	.group('admin')
-	.toString();
-// cmd = '/usr/local/sbin/varnishd -g admin'
+	.toString(); // 'varnishd -g admin'
 ```
 
 ### Server.hash()
 
 Specifies the hash algorithm.
 
-  - simple_list: A simple doubly-linked list. Not recommended for production use.
-  - classic[,buckets]: A standard hash table. This is the default. The hash key is the CRC32 of the object's URL modulo the size of the hash table. Each table entry points to a list of elements which share the same hash key. The buckets parameter specifies the number of entries in the hash table. The default is 16383.
-  - critbit: A self-scaling tree structure. The default hash algorithm in 2.1. In comparison to a more traditional B tree the critbit tree is almost completely lockless.
+  - `simple_list`: A simple doubly-linked list. Not recommended for production use.
+  - `classic[,buckets]`: A standard hash table. This is the default. The hash key is the CRC32 of the object's URL modulo the size of the hash table. Each table entry points to a list of elements which share the same hash key. The buckets parameter specifies the number of entries in the hash table. The default is 16383.
+  - `critbit`: A self-scaling tree structure. The default hash algorithm in 2.1. In comparison to a more traditional B tree the critbit tree is almost completely lockless.
   
 ```js
 
-var cmd = server
+server
 	.hash('classic,16383')
-	.toString();
-// cmd = '/usr/local/sbin/varnishd -h classic,16383'
+	.toString(); // 'varnishd -h classic,16383'
 ```
 
 ### Server.id()
@@ -298,10 +290,9 @@ Specify the identity of the varnish server. This can be accessed using server.id
 
 ```js
 
-var cmd = server
+server
 	.id('integration')
-	.toString();
-// cmd = '/usr/local/sbin/varnishd -i integration'
+	.toString(); // 'varnishd -i integration'
 ```
 
 ### Server.shmlog()
@@ -310,10 +301,9 @@ Specify size of shmlog file. Scaling suffixes like 'k', 'm' can be used up to (e
 
 ```js
 
-var cmd = server
+server
 	.shmlog('80M')
-	.toString();
-// cmd = '/usr/local/sbin/varnishd -l 80M'
+	.toString(); // 'varnishd -l 80M'
 ```
 
 ### Server.name()
@@ -322,10 +312,9 @@ Specify a name for this instance. Amonst other things, this name is used to cons
 
 ```js
 
-var cmd = server
+server
 	.name('ref')
-	.toString();
-// cmd = '/usr/local/sbin/varnishd -n ref'
+	.toString(); // 'varnishd -n ref'
 ```
 
 ### Server.pidfile()
@@ -334,10 +323,9 @@ Write the process's PID to the specified file.
 
 ```js
 
-var cmd = server
+server
 	.pidfile('/var/run/varnish.pid')
-	.toString();
-// cmd = '/usr/local/sbin/varnishd -P /var/run/varnish.pid'
+	.toString(); // 'varnishd -P /var/run/varnish.pid'
 ```
 
 ### Server.param()
@@ -346,11 +334,10 @@ Set the parameter specified by param to the specified value. See Run-Time Parame
 
 ```js
 
-var cmd = server
+server
   .param('ban_lurker_sleep', 100)
   .param('cli_buffer', 64000)
-  .toString();
-// cmd = '/usr/local/sbin/varnishd -p ban_lurker_sleep=100 -p cli_buffer=64000'
+  .toString(); // 'varnishd -p ban_lurker_sleep=100 -p cli_buffer=64000'
 ```
 
 ### Server.secret()
@@ -359,10 +346,9 @@ Path to a file containing a secret used for authorizing access to the management
 
 ```js
 
-var cmd = server
+server
   .secret('/secret.file')
-  .toString();
-// cmd = '/usr/local/sbin/varnishd -S /secret.file'
+  .toString(); // 'varnishd -S /secret.file'
 ```
 
 ### Server.storage()
@@ -371,10 +357,9 @@ Use the specified storage backend. See Storage Types for a list of supported sto
 
 ```js
 
-var cmd = server
+server
   .storage('malloc,500M)
-  .toString();
-// cmd = '/usr/local/sbin/varnishd -s malloc,500M'
+  .toString(); // 'varnishd -s malloc,500M'
 ```
 
 ### Server.management()
@@ -383,10 +368,9 @@ Offer a management interface on the specified address and port. See Management I
 
 ```js
 
-var cmd = server
+server
   .management('localhost:5421')
-  .toString();
-// cmd = '/usr/local/sbin/varnishd -T localhost:5421'
+  .toString(); // 'varnishd -T localhost:5421'
 ```
 
 ### Server.reverse()
@@ -395,10 +379,9 @@ Connect to this port and offer the command line interface. Think of it as a reve
 
 ```js
 
-var cmd = server
+server
   .reverse('localhost:1245')
-  .toString();
-// cmd = '/usr/local/sbin/varnishd -M localhost:1245'
+  .toString(); // 'varnishd -M localhost:1245'
 ```
 
 ### Server.ttl()
@@ -407,10 +390,9 @@ Specifies a hard minimum time to live for cached documents. This is a shortcut f
 
 ```js
 
-var cmd = server
+server
   .ttl(500)
-  .toString();
-// cmd = '/usr/local/sbin/varnishd -t 500'
+  .toString(); // 'varnishd -t 500'
 ```
 
 ### Server.user()
@@ -421,10 +403,9 @@ If specifying both a user and a group, the user should be specified first.
 
 ```js
 
-var cmd = server
+server
   .user('nw')
-  .toString();
-// cmd = '/usr/local/sbin/varnishd -u nw'
+  .toString(); // 'varnishd -u nw'
 ```
 
 ### Server.version()
@@ -433,10 +414,9 @@ Display the version number and exit.
 
 ```js
 
-var cmd = server
+server
   .version()
-  .toString();
-// cmd = '/usr/local/sbin/varnishd -V'
+  .toString(); // 'varnishd -V'
 ```
 
 ### Server.workers()
@@ -447,10 +427,9 @@ If only one number is specified, thread_pool_min and thread_pool_max are both se
 
 ```js
 
-var cmd = server
+server
   .workers('2,500,300')
-  .toString();
-// cmd = '/usr/local/sbin/varnishd -w 2,500,300'
+  .toString(); // 'varnishd -w 2,500,300'
 ```
 
 ### Server.start()
@@ -686,6 +665,14 @@ console.log(list);
 ### Admin.set(parameter, new, callback)
 
   Set a parameter
+  
+```js
+
+admin.set('cli_timeout', 20, function(err){
+  
+});
+
+```
 
 ### Admin.panic(callback)
 
@@ -822,6 +809,10 @@ Stat.list(function(err, list){
 ```
 
 **[Complete List of Stat Fields](https://github.com/triplecrown/varnish/wiki/Stat-Fields)**
+
+
+### Stat.kill(callback)
+
 
 
 
