@@ -7,6 +7,8 @@ _from:_ [varnish-cache.org](https://www.varnish-cache.org/)
 ```
 Varnish is a web accelerator. You install it in front of your web application and it will speed it up significantly. 
 ```
+![varnish](http://nw.is.s3.amazonaws.com/varnish.jpg)
+
 
 __Note:__ This library only targets Varnish 3.x and above. For clarity on the feature please refer to the [documentation](https://www.varnish-cache.org/docs/3.0/)
 
